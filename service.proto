@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+service PingAPI {
+  rpc Ping(PingRequest) returns (PingResponse);
+}
+
+message PingRequest {}
+
+message PingResponse {
+  Pong pong = 1;
+}
+
+message Pong {
+  string message = 1;
+}
