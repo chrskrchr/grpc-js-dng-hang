@@ -39,26 +39,19 @@ const client = new PingAPI("bogus.host", Grpc.credentials.createInsecure(), {
 });
 
 (async function main() {
-  // fails immediately
-  console.log("executing request #1");
-  try {
-    await ping(client);
-  } catch (error) {
-    console.log(error);
+  const RUNS = 250;
+  for (let i = 1; i <= RUNS; i++) {
+    console.log(`executing request #${i}`);
+    try {
+      await ping(client);
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(`request #${i} finished`);
+
+    console.log("sleeping...");
+    await sleep(66);
   }
-  console.log("request #1 finished");
 
-  console.log("sleeping...");
-  await sleep(1000);
-
-  // hangs indefinitely if we slept for less than `grpc.initial_reconnect_backoff_ms`
-  console.log("executing request #2");
-  try {
-    await ping(client);
-  } catch (error) {
-    console.log(error);
-  }
-  console.log("request #2 finished");
-
-  clearTimeout(keepAliveRef);
+  console.log(`${new Date().toISOString()} | finished executing requests`);
 })();
